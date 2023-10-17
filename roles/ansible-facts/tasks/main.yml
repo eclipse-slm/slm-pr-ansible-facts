@@ -1,0 +1,106 @@
+---
+# tasks file for ansible-facts
+- name: Check input parameter
+  ansible.builtin.assert:
+    that:
+      - (aas_id is defined) and (aas_id | length > 0)
+
+- name: Create AAS
+  ansible.builtin.uri:
+    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}"
+    method: PUT
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body: "{{ aas }}"
+  register: create_aas_request
+  when: force_create_ass | default(false)
+  until: not create_aas_request.failed
+
+- name: Collection facts
+  ansible.builtin.setup:
+
+- name: Add Strings of Ansible Facts to Submodel Element List
+  ansible.builtin.set_fact:
+    aas_submodel_elements: "{{ aas_submodel_elements | default([]) + [ lookup('template', 'submodel_element.j2') | from_yaml ] }}"
+  when:
+    - item.value is string
+  loop: "{{ ansible_facts | dict2items }}"
+  vars:
+    seIdShort: "{{ item.key | replace('.', '') }}"
+    seValueType: "string"
+    seValue: "{{ item.value | string }}"
+
+
+#- name: Create Ansible Facts Submodel Element - Strings
+#  ansible.builtin.uri:
+#    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}/submodel/submodelElements/{{ item.key | replace('.', '') }}"
+#    method: PUT
+#    headers:
+#      Content-Type: application/json
+#    body_format: json
+#    body:
+#      idShort: "{{ item.key | replace('.', '') }}"
+#      modelType:
+#        name: "Property"
+#      valueType: "string"
+#      value: "{{ item.value | string }}"
+#  when:
+#    - item.value is string
+#  loop: "{{ ansible_facts | dict2items }}"
+#  delegate_to: localhost
+
+
+
+#- name: Create Ansible Facts Submodel Element - Arrays
+#  ansible.builtin.uri:
+#    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}/submodel/submodelElements/{{ item.key | replace('.', '') }}"
+#    method: PUT
+#    headers:
+#      Content-Type: application/json
+#    body_format: json
+#    body:
+#      idShort: "{{ item.key | replace('.', '') }}"
+#      modelType:
+#        name: "Property"
+#      valueType: "anyType"
+#      value: "{{ item.value | string }}"
+#  when:
+#    - item.value is not string
+#    - item.value is iterable
+#    - item.value is not mapping
+#  loop: "{{ ansible_facts | dict2items }}"
+#  delegate_to: localhost
+
+- name: Add Arrays of Ansible Facts to Submodel Element List
+  ansible.builtin.set_fact:
+    aas_submodel_elements: "{{ aas_submodel_elements | default([]) + [ lookup('template', 'submodel_element.j2') | from_yaml ] }}"
+  when:
+    - item.value is not string
+    - item.value is iterable
+    - item.value is not mapping
+  loop: "{{ ansible_facts | dict2items }}"
+  vars:
+    seIdShort: "{{ item.key | replace('.', '') }}"
+    seValueType: "anyType"
+    seValue: "{{ item.value | string }}"
+
+- name: Include - Create Submodel Element Collections
+  ansible.builtin.include_tasks: helper/register_submodel_element_collection.yml
+  when:
+    - item.value is mapping
+  loop: "{{ ansible_facts | dict2items }}"
+
+- name: Create Ansible Facts Submodel
+  ansible.builtin.uri:
+    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}"
+    method: PUT
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body: "{{ aas_submodel }}"
+  delegate_to: localhost
+
+# Only required if server does not register submodel automatically:
+- name: Register submodel descriptor at registry
+  ansible.builtin.include_tasks: helper/register_submodel_registry.yml

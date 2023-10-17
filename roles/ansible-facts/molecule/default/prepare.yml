@@ -1,0 +1,34 @@
+---
+- name: Prepare AAS-Registry
+  hosts: aas_registry
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Include vars
+      ansible.builtin.include_vars:
+        file: vars.yml
+
+    - name: Lookup compose file
+      ansible.builtin.set_fact:
+        docker_compose_definition: "{{ lookup('template', 'docker-compose.yml') | from_yaml }}"
+
+    - name: Docker compose up
+      community.docker.docker_compose:
+        project_name: aas-registry
+        definition: "{{ docker_compose_definition }}"
+
+
+#- name: Prepare AAS-Server
+#  hosts: aas_server
+#  gather_facts: yes
+#  become: yes
+#  tasks:
+#    - name: "Include basyx_server - state = present"
+#      ansible.builtin.include_role:
+#        name: "basyx_server"
+#
+#    - name: Include vars
+#      ansible.builtin.include_vars:
+#        file: vars.yml
+
+

@@ -1,0 +1,35 @@
+---
+- name: Init submodel_element_collection and value fact
+  ansible.builtin.set_fact:
+    submodel_element_collection: {}
+    value: []
+
+- name: Fill "value" property of Submodel Element Collection
+  ansible.builtin.set_fact:
+    value: "{{ value + [ {'idShort': (entry.key | replace('.', '')), 'modelType': { 'name': 'Property' } , 'valueType': 'string', 'value': entry.value} ] }}"
+  loop: "{{ item.value | dict2items }}"
+  loop_control:
+    loop_var: entry
+
+- name: Set Submodel Element Collection
+  ansible.builtin.set_fact:
+    submodel_element_collection:
+      idShort: "{{ item.key | replace('.', '') }}"
+      modelType:
+        name: SubmodelElementCollection
+      value: "{{ value }}"
+
+- name: Add Dicts of Ansible Facts to Submodel Element List
+  ansible.builtin.set_fact:
+    aas_submodel_elements: "{{ aas_submodel_elements | default([]) + [ submodel_element_collection ] }}"
+
+
+#- name: Create Ansible Facts Submodel Element - Dicts
+#  ansible.builtin.uri:
+#    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}/submodel/submodelElements/{{ item.key | replace('.', '') }}"
+#    method: PUT
+#    headers:
+#      Content-Type: application/json
+#    body_format: json
+#    body: "{{ submodel_element_collection }}"
+#  delegate_to: localhost

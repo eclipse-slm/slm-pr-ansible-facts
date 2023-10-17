@@ -1,0 +1,134 @@
+### GET /shells - Get Shells
+GET http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells
+
+### PUT /shells/<id> - Create Shell
+PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234
+Content-Type: application/json
+
+{
+  "idShort": "test1234",
+  "identification": {
+    "id": "test1234",
+    "idType": "Custom"
+  },
+  "asset": {
+    "kind": "",
+    "idShort": "test1234",
+    "identification": {
+      "id": "test1234",
+      "idType": "Custom"
+    }
+  }
+}
+
+### GET /shells/<id> Get AAS
+GET http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234
+Content-Type: application/json
+
+### DELETE /shells/<id>
+DELETE http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/{{aas_id}}
+
+### PUT /shells/<id>/aas/submodels/<sm-id-short>
+PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/{{aas_id}}/aas/submodels/submodel-id-short
+Content-Type: application/json
+
+{
+  "identification": {
+    "idType": "Custom",
+    "id": "submodel-id-short"
+  },
+  "idShort": "submodel-id-short"
+}
+
+### DELETE /shells/<id>
+DELETE http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/{{aas_id}}
+
+### DELETE /shells/<id>/aas/submodels/<id-short>
+DELETE http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/{{aas_id}}/aas/submodels/PlatformResources
+
+
+### PUT /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath}
+PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-id-short
+Content-Type: application/json
+
+{
+  "idShort": "submodel-element-id-short"
+}
+
+### PUT /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath} - Property
+PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-id-short
+Content-Type: application/json
+
+{
+  "idShort": "submodel-element-id-short",
+  "modelType": {
+    "name": "Property"
+  },
+  "valueType": "string",
+  "value": "testValue"
+}
+
+### DELETE /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath}
+DELETE http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-id-short
+
+### PUT /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath} - submodelElementList
+# https://github.com/admin-shell-io/aas-specs/blob/master/schemas/json/examples/generated/SubmodelElementList/no_semantic_id_list_element.json
+PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-list-id-short
+Content-Type: application/json
+
+{
+  "idShort": "submodel-element-list-id-short",
+  "modelType": {
+    "name": "List"
+  }
+  //  "modelType":  "SubmodelElementList"
+  //  "typeValueListElement": "Property",
+  //  "valueTypeListElement": "string",
+  //  "value": [
+  //    {
+  //      "name": "Property",
+  //      "valueType": "string",
+  //      "value": "value1"
+  //    },
+  //    {
+  //      "name": "Property",
+  //      "valueType": "string",
+  //      "value": "value2"
+  //    }
+  //  ]
+}
+
+### DELETE /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath} - submodelElementList
+DELETE http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-list-id-short
+
+### PUT /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath} - submodelElementCollection
+# https://github.com/admin-shell-io/aas-specs/tree/master/schemas/json/examples/generated/SubmodelElementCollection
+PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-collection-id-short
+Content-Type: application/json
+
+{
+  "idShort": "submodel-element-collection-id-short",
+  "modelType": {
+    "name": "SubmodelElementCollection"
+  },
+//  "typeValueListElement": "Property",
+//  "valueTypeListElement": "string",
+  "value": [
+    {
+      "idShort": "key1",
+//      "name": "Property",
+      "valueType": "string",
+      "value": "value1"
+    },
+    {
+      "idShort": "key2",
+//      "name": "Property",
+      "valueType": "string",
+      "value": "value2"
+    }
+  ]
+}
+
+### DELETE /shells/{id}/aas/submodels/{id}/submodel/submodelElements/{seIdShortPath} - submodelElementCollection
+# https://github.com/admin-shell-io/aas-specs/tree/master/schemas/json/examples/generated/SubmodelElementCollection
+DELETE http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/test1234/aas/submodels/submodel-id-short/submodel/submodelElements/submodel-element-collection-id-short

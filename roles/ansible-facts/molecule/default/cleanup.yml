@@ -1,0 +1,14 @@
+---
+- name: Cleanup
+  hosts: ssh
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Include vars
+      ansible.builtin.include_vars:
+        file: vars.yml
+
+    - name: Delete AAS
+      ansible.builtin.uri:
+        url: "{{ aas_server_base_url }}/shells/{{ aas.identification.id }}"
+        method: DELETE

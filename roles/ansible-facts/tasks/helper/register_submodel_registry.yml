@@ -1,0 +1,30 @@
+---
+- name: "Check if AAS with id = {{ aas_id }} is available at registry"
+  ansible.builtin.uri:
+    url: "{{ aas_registry_base_url }}/api/v1/registry/{{ aas_id }}"
+    method: GET
+    status_code: [200, 404]
+  register: get_aas_registry
+  delegate_to: localhost
+
+- name: Create AAS Descriptor at registry
+  ansible.builtin.uri:
+    url: "{{ aas_registry_base_url }}/api/v1/registry/{{ aas_id }}"
+    method: PUT
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body: "{{ aas_descriptor }}"
+  when: get_aas_registry.status == 404
+  delegate_to: localhost
+
+- name: Create AAS Submodel Descriptor at registry
+  ansible.builtin.uri:
+    url: "{{ aas_registry_base_url }}/api/v1/registry/{{ aas_id }}/submodels/{{ aas_submodel.idShort }}"
+    method: PUT
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body: "{{ aas_submodel_descriptor }}"
+  delegate_to: localhost
+

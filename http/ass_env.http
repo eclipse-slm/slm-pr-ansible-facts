@@ -1,0 +1,94 @@
+### GET /shells - Get Shells
+GET http://{{aas_env_host}}:{{aas_env_port}}/shells
+
+### POST /shells - Create Shell - 1
+POST http://{{aas_env_host}}:{{aas_env_port}}/shells
+Content-Type: application/json
+
+{
+  "id": "test12345",
+  "idShort": "test12345",
+  "modelType": "AssetAdministrationShell",
+  "assetInformation": {
+    "assetKind": "INSTANCE",
+    "assetType": "test-type",
+    "globalAssetID": "872ee757-801c-44dd-a740-ac4e41c62f88",
+    "specificAssetIds": []
+  }
+}
+
+### POST /shells - Create Shell - 2
+POST http://{{aas_env_host}}:{{aas_env_port}}/shells
+Content-Type: application/json
+
+{
+  "idShort": "test1234",
+  "displayName": [
+    {
+      "language": "EN",
+      "test": "Test-1234"
+    }
+  ],
+  "description": [
+    {
+      "language": "EN",
+      "text": "This is just a test"
+    }
+  ],
+  "modelType": "AssetAdministrationShell",
+  "administration": {
+    "embeddedDataSpecifications": {},
+    "version": "1.0.0",
+    "revision": "A",
+    "creator": {},
+    "templateId": ""
+  },
+  "id": "test1234",
+  "submodels": [
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "ansible-facts"
+        }
+      ]
+    }
+  ],
+  "referredSemanticId": {}
+}
+
+### GET /shells/<id> - Get Shell
+GET http://{{aas_env_host}}:{{aas_env_port}}/shells/test12345
+
+### PUT /shells/<id> - Update Shell
+PUT http://{{aas_env_host}}:{{aas_env_port}}/shells/test1234
+Content-Type: application/json
+
+{
+  "id": "test1234",
+  "idShort": "test1234",
+  "modelType": "AssetAdministrationShell"
+}
+
+### DELETE /shells/<id> - Delete Shell
+DELETE http://{{aas_env_host}}:{{aas_env_port}}/shells/test1234
+
+### PUT Register Submodel
+PUT http://{{aas_env_host}}:{{aas_env_port}}/shells/test1234/submodels/submodel-id-short
+Content-Type: application/json
+
+{
+  "idShort": "submodel-id-short",
+  "kind": "Instance",
+  "semanticId": {
+    "keys": [
+      {
+        "type": "Submodel",
+        "idType": "Custom",
+        "value": "fabos-ansible-facts",
+        "local": true
+      }
+    ]
+  }
+}

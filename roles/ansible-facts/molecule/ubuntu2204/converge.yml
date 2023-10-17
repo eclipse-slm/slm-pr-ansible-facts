@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: ssh
+  gather_facts: yes
+  become: no
+  tasks:
+    - name: Include vars
+      ansible.builtin.include_vars:
+        file: ../default/vars.yml
+
+    - name: Include ansible-facts role
+      ansible.builtin.include_role:
+        name: ansible-facts

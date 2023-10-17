@@ -1,0 +1,37 @@
+---
+- name: "Create inventory with target host(s)"
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Use inventory Helper to setup ansible inventory
+      ansible.builtin.include_role:
+        name: profiler-inventory-helper
+
+- name: Run ansible-facts profiler
+  hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Assert input parameter
+      ansible.builtin.assert:
+        that:
+          - (resource_id is defined) and (resource_id | length > 0)
+
+    - name: Set aas_id
+      ansible.builtin.set_fact:
+        aas_id: "{{ resource_id }}"
+
+    - name: Set aas_server_base_url
+      ansible.builtin.set_fact:
+        aas_server_base_url: "http://aas-server:4001/aasServer"
+      when: (aas_server_base_url is not defined) or (aas_server_base_url | length == 0)
+
+    - name: Set aas_registry_base_url
+      ansible.builtin.set_fact:
+        aas_registry_base_url: "http://aas-registry:4000/registry"
+      when: (aas_registry_base_url is not defined) or (aas_registry_base_url | length == 0)
+
+    - name: "Include ansible-facts"
+      ansible.builtin.include_role:
+        name: "ansible-facts"

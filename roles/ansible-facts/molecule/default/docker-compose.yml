@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  aas-registry:
+    image: eclipsebasyx/aas-registry:1.4.0
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      basyxregistry_registry_events: MQTTV2_SIMPLE_ENCODING
+      basyxmqtt_server: tcp://aas-broker:1883
+      basyxcontext_accesscontrolalloworigin: "*"
+
+
+  aas-server:
+    image: eclipsebasyx/aas-server:1.4.0
+    ports:
+      - "4001:4001"
+    environment:
+      basyxaas_aas_events: MQTTV2_SIMPLE_ENCODING
+      basyxaas_registry_path: http://aas-registry:4000/registry/api/v1/registry
+      basyxmqtt_server: tcp://aas-broker:1883
+      basyxcontext_accesscontrolalloworigin: "*"
+      waiting_for: '[{"host":"aas-registry","port":"4000"}]'
+
+
+  aas-gui:
+    image: eclipsebasyx/aas-gui:v230703
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_REGISTRY_PATH: "{{ aas_registry_base_url }}"
+      VITE_AAS_SERVER_PATH: "{{ aas_server_base_url }}"
+      VITE_PRIMARY_COLOR: "00A0E3"
+
+
+  aas-broker:
+    image: fabos4ai/aas-broker:1.0.0-SNAPSHOT
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+
+  aas-mqtt-gui:
+    image: emqx/mqttx-web
+    ports:
+      - "80:80"
+

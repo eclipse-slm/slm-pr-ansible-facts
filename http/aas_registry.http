@@ -1,0 +1,63 @@
+### GET / - Get AAS
+GET http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry
+
+### GET /<aasId> - Get one AAS
+GET http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}
+
+### PUT /<aasId> - Create one AAS
+PUT http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}
+Content-Type: application/json
+
+{
+  "modelType": {
+    "name": "AssetAdministrationShellDescriptor"
+  },
+  "idShort": "192.168.0.151",
+  "identification": {
+    "idType": "Custom",
+    "id": {{aas_id}}
+  },
+  "endpoints": [],
+  "asset": {
+    "keys": [
+      {
+        "type": "Asset",
+        "local": true,
+        "value": "",
+        "idType": "IRDI"
+      }
+    ],
+    "modelType": {
+      "name": "Asset"
+    },
+    "dataSpecification": [],
+    "embeddedDataSpecifications": [],
+    "idShort": "test-hostname",
+    "identification": {
+      "idType": "IRDI",
+      "id": ""
+    },
+    "kind": "Instance"
+  },
+  "submodels": []
+}
+
+### DELETE /<aasId> - Delete one AAS
+DELETE http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}
+
+### GET /<aasId>/submodels - Get Submodels of AAS
+GET http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}/submodels
+
+### GET /<aasId>/submodels/<submodelId> - Get one Submodel of AAS
+GET http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}/submodels/PlatformResources-144a1a7c-d6c6-4a45-9448-414678bbcf25
+
+### PUT /<aasId>/submodels/<submodelId> - Add one SubmodelDescriptor to AAS
+PUT http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}/submodels/ansible-facts
+Content-Type: application/json
+
+{
+
+}
+
+### DELETE /<aasId>/submodels/<submodelId> - Delete one Submodel of AAS
+DELETE http://{{ass_registry_host}}:{{ass_registry_port}}/registry/api/v1/registry/{{aas_id}}/submodels/PlatformResources-144a1a7c-d6c6-4a45-9448-414678bbcf25

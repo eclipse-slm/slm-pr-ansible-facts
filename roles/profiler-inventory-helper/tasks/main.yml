@@ -1,0 +1,36 @@
+---
+# tasks file for profiler-inventory-helper
+- name: Get config from environment variables
+  ansible.builtin.set_fact:
+    consul_url: "{{ lookup('env', 'CONSUL_URL') }}"
+    consul_token: "{{ lookup('env', 'CONSUL_TOKEN') }}"
+    vault_url: "{{ lookup('env', 'VAULT_URL') }}"
+    vault_approle_role_id: "{{ lookup('env', 'VAULT_APPROLE_ROLE_ID') }}"
+    vault_approle_secret_id: "{{ lookup('env', 'VAULT_APPROLE_SECRET_ID') }}"
+  no_log: "{{ no_log | default(true) }}"
+
+- ansible.builtin.assert:
+    that:
+      - (consul_url is defined) and (consul_url|length > 0)
+      - (consul_token is defined) and (consul_token|length > 0)
+      - (vault_url is defined) and (vault_url|length > 0)
+      - (vault_approle_role_id is defined) and (vault_approle_role_id|length > 0)
+      - (vault_approle_secret_id is defined) and (vault_approle_secret_id|length > 0)
+
+- ansible.builtin.set_fact:
+    vault_lookup_base_info: "url={{ vault_url }} auth_method=approle role_id={{ vault_approle_role_id }} secret_id={{ vault_approle_secret_id }}"
+
+- name: "Get nodes"
+  ansible.builtin.uri:
+    url: "{{ consul_url }}/v1/catalog/nodes"
+    method: GET
+    status_code: 200, 404
+    validate_certs: no
+    headers:
+      Authorization: "Bearer {{ consul_token }}"
+  register: output_get_nodes
+  no_log: "{{ no_log | default(true) }}"
+
+- name: Add Node to inventory
+  ansible.builtin.include_tasks: helper/add_node_to_inventory.yml
+  loop: "{{ output_get_nodes.json }}"

@@ -1,0 +1,88 @@
+---
+# defaults file for ansible-facts
+aas_descriptor:
+  modelType:
+    name: AssetAdministrationShellDescriptor
+  idShort: "{{ ansible_hostname }}"
+  identification:
+    idType: Custom
+    id: "{{ aas_id }}"
+  endpoints:
+    - type: http
+      address: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas"
+  asset:
+    keys:
+      - type: Asset
+        local: true
+        value: ''
+        idType: IRDI
+    modelType:
+      name: Asset
+    dataSpecification: [ ]
+    embeddedDataSpecifications: [ ]
+    idShort: "{{ ansible_hostname }}"
+    identification:
+      idType: IRDI
+      id: ''
+    kind: Instance
+  submodels: [ ]
+
+aas_submodel_descriptor:
+  modelType:
+    name: SubmodelDescriptor
+  idShort: "{{ aas_submodel.idShort }}"
+  identification:
+    idType: Custom
+    id: "{{ aas_submodel.identification.id }}"
+  endpoints:
+    - type: http
+      address: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{ aas_submodel.idShort }}/submodel"
+  semanticId: "{{ aas_submodel.semanticId }}"
+
+aas:
+  modelType:
+    name: AssetAdministrationShell
+  idShort: "{{ ansible_hostname }}"
+  identification:
+    id: "{{ aas_id }}"
+    idType: Custom
+  dataSpecification: []
+  embeddedDataSpecifications: []
+  asset:
+    modelType:
+      name: Asset
+    kind: "Instance"
+    idShort: "{{ ansible_hostname }}"
+    identification:
+      id: ""
+      idType: IRDI
+    dataSpecification: []
+    embeddedDataSpecifications: []
+  views: []
+  conceptDictionary: []
+
+aas_submodel:
+  idShort: ansible-facts
+  identification:
+    idType: Custom
+    id: "ansible-facts-{{ aas_id }}"
+  dataSpecification: []
+  embeddedDataSpecifications: []
+  modelType:
+    name: Submodel
+  kind: Instance
+  semanticId:
+    keys:
+      - type: ConceptDescription
+        idType: IRI
+        value: "https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html#ansible-facts"
+        local: false
+  parent:
+    keys:
+      - type: AssetAdministrationShell
+        local: true
+        value: "{{ aas_id }}"
+        idType: Custom
+  submodelElements: "{{ aas_submodel_elements }}"
+
+aas_submodel_elements: []

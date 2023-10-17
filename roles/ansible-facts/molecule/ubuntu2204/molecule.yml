@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: default
+platforms:
+#  UBUNTU:
+  - name: ubuntu2204
+    template_name: ubuntu-22-04
+    groups: ['ssh']
+  - name: aas-registry
+    template_name: ubuntu-22-04-docker
+    groups: ['aas_registry', 'aas_server']
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../default/create.yml
+    destroy: ../default/destroy.yml
+    prepare: ../default/prepare.yml
+verifier:
+  name: ansible

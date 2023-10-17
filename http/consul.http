@@ -1,0 +1,7 @@
+### SERVER - Get Catalog Nodes
+GET http://{{consul_host}}:{{consul_port}}/v1/catalog/nodes
+Authorization: Bearer {{consul_token}}
+
+### SERVER - Get Node Services filtered by tags
+GET http://{{consul_host}}:{{consul_port}}/v1/catalog/node-services/1.2.3.4?filter=%22RemoteAccessService%22%20in%20Tags
+Authorization: Bearer {{consul_token}}
