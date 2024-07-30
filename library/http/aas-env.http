@@ -1,0 +1,14 @@
+### Submodels
+GET http://{{aas_env_host}}:{{aas_env_port}}/submodels
+
+### Submodel
+POST http://{{aas_env_host}}:{{aas_env_port}}/submodels
+Content-Type: application/json
+
+< ../result.json
+
+### Submodel
+GET http://{{aas_env_host}}:{{aas_env_port}}/submodels/{{aas_env_sm_id_b64}}
+
+### Submodel Values
+GET http://{{aas_env_host}}:{{aas_env_port}}/submodels/{{aas_env_sm_id_b64}}/$value
