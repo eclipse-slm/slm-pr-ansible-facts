@@ -1,0 +1,12 @@
+- name: Create file containing facts
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - ansible.builtin.set_fact:
+        content:
+          ANSIBLE_MODULE_ARGS:
+            facts: "{{ ansible_facts }}"
+
+    - ansible.builtin.copy:
+        content: "{{ content | to_nice_json }}"
+        dest: "./facts.json"
