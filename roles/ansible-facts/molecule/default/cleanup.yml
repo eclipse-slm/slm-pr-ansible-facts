@@ -8,7 +8,10 @@
       ansible.builtin.include_vars:
         file: vars.yml
 
-    - name: Delete AAS
-      ansible.builtin.uri:
-        url: "{{ aas_server_base_url }}/shells/{{ aas.identification.id }}"
-        method: DELETE
+    - name: Create AAS
+      fabos.aas.aas:
+        scheme: http
+        host: "{{ aas_server_host }}"
+        port: "{{ aas_server_port }}"
+        shell_id: "{{ aas.identification.id }}"
+        state: "absent"
