@@ -22,15 +22,23 @@
       ansible.builtin.set_fact:
         aas_id: "{{ resource_id }}"
 
-    - name: Set aas_server_base_url
+    - name: Set aas_repository
       ansible.builtin.set_fact:
-        aas_server_base_url: "http://aas-server:4001/aasServer"
-      when: (aas_server_base_url is not defined) or (aas_server_base_url | length == 0)
+        aas_repository_host: "aas-repository"
+        aas_repository_port: 8081
+      when: (aas_repository_host is not defined) or (aas_repository_host | length == 0)
 
-    - name: Set aas_registry_base_url
+    - name: Set aas_registry
       ansible.builtin.set_fact:
-        aas_registry_base_url: "http://aas-registry:4000/registry"
-      when: (aas_registry_base_url is not defined) or (aas_registry_base_url | length == 0)
+        aas_registry_host: "aas-registry"
+        aas_registry_port: 8082
+      when: (aas_registry_host is not defined) or (aas_registry_host | length == 0)
+
+    - name: Set submodel_registry
+      ansible.builtin.set_fact:
+        submodel_registry_host: "submodel-registry"
+        submodel_registry_port: 8083
+      when: (submodel_registry_host is not defined) or (submodel_registry_host | length == 0)
 
     - name: "Include ansible-facts"
       ansible.builtin.include_role:

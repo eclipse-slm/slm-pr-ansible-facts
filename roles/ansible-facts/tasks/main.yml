@@ -4,12 +4,15 @@
   ansible.builtin.assert:
     that:
       - (aas_id is defined) and (aas_id | length > 0)
+      - (aas_repository_host is defined) and (aas_repository_port is defined)
+      - (aas_registry_host is defined) and (aas_registry_port is defined)
+      - (submodel_registry_host is defined) and (submodel_registry_port is defined)
 
 - name: Create AAS
   fabos.aas.aas:
     scheme: http
-    host: "{{ aas_server_host }}"
-    port: "{{ aas_server_port }}"
+    host: "{{ aas_repository_host }}"
+    port: "{{ aas_repository_port }}"
     shell: "{{ aas }}"
   retries: 5
   register: create_aas_request
@@ -21,96 +24,17 @@
 
 - name: Convert facts to submodel
   fabos.aas.convert_to_sm:
-    id: "{{ aas_id }}"
-    facts: "ansible-facts-{{ aas_id }}"
+    id: "ansible-facts-{{ aas_id }}"
+    id_short: "ansible-facts"
+    facts: "{{ ansible_facts }}"
   register: convert_result
 
-- name: Add Strings of Ansible Facts to Submodel Element List
-  ansible.builtin.set_fact:
-    aas_submodel_elements: "{{ aas_submodel_elements | default([]) + [ lookup('template', 'submodel_element.j2') | from_yaml ] }}"
-  when:
-    - item.value is string
-  loop: "{{ ansible_facts | dict2items }}"
-  vars:
-    seIdShort: "{{ item.key | replace('.', '') }}"
-    seValueType: "string"
-    seValue: "{{ item.value | string }}"
-
-
-#- name: Create Ansible Facts Submodel Element - Strings
-#  ansible.builtin.uri:
-#    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}/submodel/submodelElements/{{ item.key | replace('.', '') }}"
-#    method: PUT
-#    headers:
-#      Content-Type: application/json
-#    body_format: json
-#    body:
-#      idShort: "{{ item.key | replace('.', '') }}"
-#      modelType:
-#        name: "Property"
-#      valueType: "string"
-#      value: "{{ item.value | string }}"
-#  when:
-#    - item.value is string
-#  loop: "{{ ansible_facts | dict2items }}"
-#  delegate_to: localhost
-
-
-
-#- name: Create Ansible Facts Submodel Element - Arrays
-#  ansible.builtin.uri:
-#    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}/submodel/submodelElements/{{ item.key | replace('.', '') }}"
-#    method: PUT
-#    headers:
-#      Content-Type: application/json
-#    body_format: json
-#    body:
-#      idShort: "{{ item.key | replace('.', '') }}"
-#      modelType:
-#        name: "Property"
-#      valueType: "anyType"
-#      value: "{{ item.value | string }}"
-#  when:
-#    - item.value is not string
-#    - item.value is iterable
-#    - item.value is not mapping
-#  loop: "{{ ansible_facts | dict2items }}"
-#  delegate_to: localhost
-
-- name: Add Arrays of Ansible Facts to Submodel Element List
-  ansible.builtin.set_fact:
-    aas_submodel_elements: "{{ aas_submodel_elements | default([]) + [ lookup('template', 'submodel_element.j2') | from_yaml ] }}"
-  when:
-    - item.value is not string
-    - item.value is iterable
-    - item.value is not mapping
-  loop: "{{ ansible_facts | dict2items }}"
-  vars:
-    seIdShort: "{{ item.key | replace('.', '') }}"
-    seValueType: "anyType"
-    seValue: "{{ item.value | string }}"
-
-- name: Include - Create Submodel Element Collections
-  ansible.builtin.include_tasks: helper/register_submodel_element_collection.yml
-  when:
-    - item.value is mapping
-  loop: "{{ ansible_facts | dict2items }}"
-
-- name: Create Ansible Facts Submodel
-  ansible.builtin.uri:
-    url: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{aas_submodel.idShort}}"
-    method: PUT
-    headers:
-      Content-Type: application/json
-    body_format: json
-    body: "{{ aas_submodel }}"
-  delegate_to: localhost
 
 - name: Register submodel at repo
   fabos.aas.submodel:
     scheme: http
-    host: "{{ aas_env.host }}"
-    port: "{{ aas_env.port }}"
+    host: "{{ aas_repository_host }}"
+    port: "{{ aas_repository_port }}"
     submodel: "{{ convert_result.submodel }}"
     force: true
   register: register_sm
