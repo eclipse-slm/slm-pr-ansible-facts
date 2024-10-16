@@ -12,9 +12,9 @@
     filter_expr: "{{ '\"aas\" in ServiceTags' | urlencode() }}"
   no_log: "{{ no_log | default(true) }}"
 
-- name: Print aas_repository_host
-  ansible.builtin.debug:
-    msg: "{{ output_get_services.json | dict2items  }}"
+- name: Set resource credentials
+  ansible.builtin.set_fact:
+    ip_address: "{{ item.Address }}"
 
 - name: "Add Service to facts"
   ansible.builtin.include_tasks: helper/add_fact.yml
