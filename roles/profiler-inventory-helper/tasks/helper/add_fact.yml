@@ -12,11 +12,11 @@
 
 - name: Print aas_repository_host
   ansible.builtin.debug:
-    msg: "output_get_service.json | first |"
+    msg: "{{ output_get_service.json | first }}"
 
 - name: Print aas_repository_host
   ansible.builtin.debug:
-    msg: "output_get_service | first |"
+    msg: "{{ output_get_service | first }}"
 
 - name: Set Service
   ansible.builtin.set_fact:
