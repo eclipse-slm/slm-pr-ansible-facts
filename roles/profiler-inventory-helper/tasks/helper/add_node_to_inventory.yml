@@ -59,6 +59,6 @@
     aas_registry_port: "{{ aas_registry_port }}"
     submodel_registry_host: "{{ submodel_registry_host }}"
     submodel_registry_port: "{{ submodel_registry_port }}"
-  no_log: "{{ no_log | default(true) }}"
+#  no_log: "{{ no_log | default(false) }}"
   when: remote_access_service | length > 0
 
