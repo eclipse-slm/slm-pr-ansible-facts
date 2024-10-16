@@ -16,7 +16,7 @@
 
 - name: Set Service Facts
   ansible.builtin.set_fact:
-    "{{ node_with_service.ServiceName | replace('-','_') }}_host": "{{ node_with_service.Address }}"
+    "{{ node_with_service.ServiceName | replace('-','_') }}_host": "{{ node_with_service.ServiceAddress }}"
     "{{ node_with_service.ServiceName | replace('-','_') }}_port": "{{ node_with_service.ServicePort }}"
   delegate_to: "{{ ip_address }}"
   run_once: true
