@@ -34,8 +34,8 @@
 
     - name: Set Service Facts
       ansible.builtin.set_fact:
-        "{{ node_with_service.json.ServiceName | replace('-','_') }}_host":"{{ node_with_service.json.Address }}"
-        "{{ node_with_service.json.ServiceName | replace('-','_') }}_port":"{{ node_with_service.json.ServicePort }}"
+        "{{ node_with_service.json.ServiceName | replace('-','_') }}_host": "{{ node_with_service.json.Address }}"
+        "{{ node_with_service.json.ServiceName | replace('-','_') }}_port": "{{ node_with_service.json.ServicePort }}"
       delegate_to: "{{ item }}"
       with_items: "{{ play_hosts }}"
       run_once: yes
