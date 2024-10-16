@@ -14,9 +14,9 @@
 
 - name: Print aas_repository_host
   ansible.builtin.debug:
-    msg: "{{ output_get_services }}"
+    msg: "{{ output_get_services.json | dict2items  }}"
 
 - name: "Add Service to facts"
   ansible.builtin.include_tasks: helper/add_fact.yml
-  loop: "{{ output_get_services | dict2items }}"
+  loop: "{{ output_get_services.json | dict2items }}"
 
