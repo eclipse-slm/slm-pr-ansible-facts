@@ -8,18 +8,6 @@
       - (aas_registry_host is defined) and (aas_registry_port is defined)
       - (submodel_registry_host is defined) and (submodel_registry_port is defined)
 
-- name: Print aas_repository_host
-  ansible.builtin.debug:
-    msg: "{{ aas_repository_host}} : {{ aas_repository_port}}"
-
-- name: Print aas_registry_host
-  ansible.builtin.debug:
-    msg: "{{ aas_registry_host}}: {{ aas_registry_port}}"
-
-- name: Print submodel_registry_host
-  ansible.builtin.debug:
-    msg: "{{ submodel_registry_host}}: {{ submodel_registry_port}}"
-
 - name: Create AAS
   slm.aas.aas:
     scheme: http
