@@ -8,6 +8,10 @@
       - (aas_registry_host is defined) and (aas_registry_port is defined)
       - (submodel_registry_host is defined) and (submodel_registry_port is defined)
 
+- name: Install bottle python package
+  ansible.builtin.pip:
+    name: basyx-python-sdk==1.0.0
+
 - name: Create AAS
   slm.aas.aas:
     scheme: http
