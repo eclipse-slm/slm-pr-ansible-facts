@@ -14,7 +14,7 @@
 
 
 - name: "Add Service to facts"
-  tasks:
+  block:
 
     - name: "Get Nodes for Service"
       ansible.builtin.uri:
@@ -27,8 +27,6 @@
       register: output_get_service
       no_log: "{{ no_log | default(true) }}"
 
-
-
     - name: Set Service
       ansible.builtin.set_fact: node_with_service="{{ output_get_service.json | first | default('') }}"
 
@@ -40,7 +38,4 @@
       with_items: "{{ play_hosts }}"
       run_once: yes
       when: (node_with_service | length > 0 )
-
-
-
   loop: "{{ output_get_services | dict2items }}"
