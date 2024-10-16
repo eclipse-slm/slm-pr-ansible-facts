@@ -8,7 +8,7 @@
   delegate_to: localhost
 
 - name: Create AAS Descriptor at registry
-  fabos.aas.aas_descriptor:
+  slm.aas.aas_descriptor:
     scheme: http
     host: "{{ aas_registry_host }}"
     port: "{{ aas_registry_port }}"
@@ -17,7 +17,7 @@
   delegate_to: localhost
 
 - name: Create AAS Submodel Descriptor at registry
-  fabos.aas.aas_descriptor:
+  slm.aas.aas_descriptor:
     scheme: http
     host: "{{ submodel_registry_host }}"
     port: "{{ submodel_registry_port }}"

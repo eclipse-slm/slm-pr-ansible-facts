@@ -9,7 +9,7 @@
       - (submodel_registry_host is defined) and (submodel_registry_port is defined)
 
 - name: Create AAS
-  fabos.aas.aas:
+  slm.aas.aas:
     scheme: http
     host: "{{ aas_repository_host }}"
     port: "{{ aas_repository_port }}"
@@ -23,7 +23,7 @@
   ansible.builtin.setup:
 
 - name: Convert facts to submodel
-  fabos.aas.convert_to_sm:
+  slm.aas.convert_to_sm:
     id: "ansible-facts-{{ aas_id }}"
     id_short: "ansible-facts"
     facts: "{{ ansible_facts }}"
@@ -31,7 +31,7 @@
 
 
 - name: Register submodel at repo
-  fabos.aas.submodel:
+  slm.aas.submodel:
     scheme: http
     host: "{{ aas_repository_host }}"
     port: "{{ aas_repository_port }}"
