@@ -35,6 +35,4 @@
   ansible.builtin.include_tasks: helper/add_node_to_inventory.yml
   loop: "{{ output_get_nodes.json }}"
 
-- name: Add AAS Service to facts
-  ansible.builtin.include_tasks: helper/add_aas_services_to_facts.yml
-  loop: "{{ output_get_nodes.json }}"
+

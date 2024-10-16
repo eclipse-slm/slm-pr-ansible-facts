@@ -24,6 +24,21 @@
   no_log: "{{ no_log | default(true) }}"
   when: remote_access_service | length > 0
 
+- name: Debug IP
+  debug:
+    var: ansible_default_ipv4.address
+
+- name: Set RemoteAccessService
+  ansible.builtin.set_fact:
+    slm_ip: ansible_default_ipv4.address
+
+- name: Assert input parameter
+  ansible.builtin.assert:
+    that:
+      - (slm_ip is defined) and (slm_ip | length > 0)
+- name: Add AAS Service to facts
+  ansible.builtin.include_tasks: helper/add_aas_services_to_facts.yml
+
 - name: Setup ansible inventory
   ansible.builtin.add_host:
     name: "{{ ip_address }}"
@@ -37,6 +52,13 @@
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
     resource_id: "{{ item.ID }}"
+    slm_ip: "{{ ansible_default_ipv4.address }}"
+    aas_repository_host: "{{ aas_repository_host }}"
+    aas_repository_port: "{{ aas_repository_port }}"
+    aas_registry_host: "{{ aas_registry_host }}"
+    aas_registry_port: "{{ aas_registry_port }}"
+    submodel_registry_host: "{{ submodel_registry_host }}"
+    submodel_registry_port: "{{ submodel_registry_port }}"
   no_log: "{{ no_log | default(true) }}"
   when: remote_access_service | length > 0
 
