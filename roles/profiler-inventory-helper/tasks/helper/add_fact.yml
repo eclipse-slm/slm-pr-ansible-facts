@@ -19,5 +19,6 @@
     "{{ node_with_service.ServiceName | replace('-','_') }}_host": "{{ node_with_service.ServiceAddress }}"
     "{{ node_with_service.ServiceName | replace('-','_') }}_port": "{{ node_with_service.ServicePort }}"
   delegate_to: "{{ ip_address }}"
+  with_items: "{{ play_hosts }}"
   run_once: true
   when: (node_with_service | length > 0 )
