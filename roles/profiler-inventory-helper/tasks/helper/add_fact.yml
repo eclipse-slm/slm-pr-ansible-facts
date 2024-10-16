@@ -10,6 +10,14 @@
   register: output_get_service
   no_log: "{{ no_log | default(true) }}"
 
+- name: Print aas_repository_host
+  ansible.builtin.debug:
+    msg: "output_get_service.json | first |"
+
+- name: Print aas_repository_host
+  ansible.builtin.debug:
+    msg: "output_get_service | first |"
+
 - name: Set Service
   ansible.builtin.set_fact:
     node_with_service: "{{ output_get_service.json | first | default('') }}"
