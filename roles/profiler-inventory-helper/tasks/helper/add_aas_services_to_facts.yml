@@ -4,7 +4,7 @@
     url: "{{ consul_url }}/v1/catalog/services?filter={{ filter_expr }}"
     method: GET
     status_code: 200, 404
-    validate_certs: no
+    validate_certs: false
     headers:
       Authorization: "Bearer {{ consul_token }}"
   register: output_get_services
@@ -12,23 +12,23 @@
     filter_expr: "{{ '\"aas\" in ServiceTags' | urlencode() }}"
   no_log: "{{ no_log | default(true) }}"
 
-
 - name: "Add Service to facts"
+  loop: "{{ output_get_services | dict2items }}"
   block:
-
     - name: "Get Nodes for Service"
       ansible.builtin.uri:
         url: "{{ consul_url }}/v1/catalog/service/{{ item.key }}"
         method: GET
         status_code: 200, 404
-        validate_certs: no
+        validate_certs: false
         headers:
           Authorization: "Bearer {{ consul_token }}"
       register: output_get_service
       no_log: "{{ no_log | default(true) }}"
 
     - name: Set Service
-      ansible.builtin.set_fact: node_with_service="{{ output_get_service.json | first | default('') }}"
+      ansible.builtin.set_fact:
+        node_with_service: "{{ output_get_service.json | first | default('') }}"
 
     - name: Set Service Facts
       ansible.builtin.set_fact:
@@ -36,6 +36,5 @@
         "{{ node_with_service.json.ServiceName | replace('-','_') }}_port": "{{ node_with_service.json.ServicePort }}"
       delegate_to: "{{ item }}"
       with_items: "{{ play_hosts }}"
-      run_once: yes
+      run_once: true
       when: (node_with_service | length > 0 )
-  loop: "{{ output_get_services | dict2items }}"
