@@ -9,7 +9,7 @@
         name: profiler-inventory-helper
     - name: Union Node
       ansible.builtin.set_fact:
-        nodes: "{{ union(nodes) }}"
+        nodes: "{{ nodes | union(nodes) }}"
 
 # gather_facts:
 - name: Gather facts from util server

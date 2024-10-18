@@ -1,6 +1,10 @@
 ---
 
 - name: Set aas_id
+  ansible.builtin.debug:
+    msg: "{{ hostvars[item] }}"
+
+- name: Set aas_id
   ansible.builtin.set_fact:
     aas_id: "{{ hostvars[item]['resource_id'] }}"
 
@@ -36,7 +40,7 @@
   slm.aas.convert_to_sm:
     id: "ansible-facts-{{ aas_id }}"
     id_short: "ansible-facts"
-    facts: "{{ ansible_facts }}"
+    facts: "{{ hostvars[item]['ansible_facts'] }}"
   register: convert_result
 
 
