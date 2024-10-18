@@ -1,7 +1,7 @@
 ---
 - name: "Check if AAS with id = {{ aas_id }} is available at registry"
   ansible.builtin.uri:
-    url: "{{ aas_registry_base_url }}/api/v1/registry/{{ aas_id }}"
+    url: "http://{{ aas_registry_host }}:{{ aas_registry_port }}/api/v1/registry/{{ aas_id }}"
     method: GET
     status_code: [200, 404]
   register: get_aas_registry

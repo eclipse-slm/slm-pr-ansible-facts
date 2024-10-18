@@ -1,8 +1,5 @@
 ---
 
-- name: Set aas_id
-  ansible.builtin.debug:
-    msg: "{{ hostvars[item] }}"
 
 - name: Set aas_id
   ansible.builtin.set_fact:
