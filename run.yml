@@ -19,6 +19,9 @@
 - name: "Add Service to facts"
   hosts: localhost
   tasks:
+    - name: debug
+      debug: msg={{ item }}
+      with_items: nodes
 
     - name: Set aas_repository
       ansible.builtin.set_fact:

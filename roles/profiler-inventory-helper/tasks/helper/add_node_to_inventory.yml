@@ -33,7 +33,7 @@
 
 - name: debug
   debug: msg={{ node }}
-  with_items: nodes
+  loop: nodes
   loop_var: node
 
 - name: Setup ansible inventory
