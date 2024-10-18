@@ -9,7 +9,7 @@ aas_descriptor:
     id: "{{ aas_id }}"
   endpoints:
     - type: http
-      address: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas"
+      address: "{{ aas_repository_url }}/shells/{{ aas_id }}/aas"
   asset:
     keys:
       - type: Asset
@@ -36,7 +36,7 @@ aas_submodel_descriptor:
     id: "{{ aas_submodel.identification.id }}"
   endpoints:
     - type: http
-      address: "{{ aas_server_base_url }}/shells/{{ aas_id }}/aas/submodels/{{ aas_submodel.idShort }}/submodel"
+      address: "{{ aas_repository_url }}/shells/{{ aas_id }}/aas/submodels/{{ aas_submodel.idShort }}/submodel"
   semanticId: "{{ aas_submodel.semanticId }}"
 
 aas:
