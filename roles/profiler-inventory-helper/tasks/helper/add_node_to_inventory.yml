@@ -32,9 +32,7 @@
     nodes: "{{ nodes|default([]) + [ ip_address ] }}"
 
 - name: debug
-  debug: msg={{ node }}
-  loop: nodes
-  loop_var: node
+  debug: msg={{ nodes }}
 
 - name: Setup ansible inventory
   ansible.builtin.add_host:

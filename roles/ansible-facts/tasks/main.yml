@@ -3,9 +3,7 @@
   debug: msg={{ item }}
 
 - name: debug
-  debug: msg={{ node }}
-  loop: item
-  loop_var: node
+  debug: msg={{ nodes }}
 
 - name: Set aas_id
   ansible.builtin.set_fact:
