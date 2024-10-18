@@ -11,9 +11,6 @@
   ansible.builtin.assert:
     that:
       - (aas_id is defined) and (aas_id | length > 0)
-      - (aas_repository_host is defined) and (aas_repository_port is defined)
-      - (aas_registry_host is defined) and (aas_registry_port is defined)
-      - (submodel_registry_host is defined) and (submodel_registry_port is defined)
 
 - name: Install bottle python package
   ansible.builtin.pip:

@@ -1,5 +1,13 @@
 ---
 
+# tasks file for ansible-facts
+- name: Check input parameter
+  ansible.builtin.assert:
+    that:
+      - (aas_repository_host is defined) and (aas_repository_port is defined)
+      - (aas_registry_host is defined) and (aas_registry_port is defined)
+      - (submodel_registry_host is defined) and (submodel_registry_port is defined)
+
 - name: Add Facts for Nodes
   include_tasks: helper/add_fact.yml
   loop: "{{ nodes }}"
