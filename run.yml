@@ -4,9 +4,6 @@
   connection: local
   gather_facts: true
   tasks:
-    - name: Set Nodes Facts
-      ansible.builtin.set_fact:
-        nodes: "[]"
     - name: Use inventory Helper to setup ansible inventory
       ansible.builtin.include_role:
         name: profiler-inventory-helper
