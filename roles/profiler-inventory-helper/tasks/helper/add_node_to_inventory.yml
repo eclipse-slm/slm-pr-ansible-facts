@@ -31,6 +31,10 @@
   ansible.builtin.set_fact:
     nodes: "{{ nodes|default([]) + [ ip_address ] }}"
 
+- name: debug
+  debug: msg={{ item }}
+  with_items: nodes
+
 - name: Setup ansible inventory
   ansible.builtin.add_host:
     name: "{{ ip_address }}"
