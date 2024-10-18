@@ -28,10 +28,6 @@
   debug:
     var: hostvars[ 'localhost' ].ansible_default_ipv4.address
 
-- name: Gather Host Facts and Print IP Addresses
-  hosts: all
-  gather_facts: yes
-
 - name: Print Host IP Address
   debug:
     msg: "Host IP Address: {{ ansible_host }}"
