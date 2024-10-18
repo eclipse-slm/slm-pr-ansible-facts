@@ -1,8 +1,5 @@
 ---
 
-- name: debug
-  debug: msg={{ aas_id }}
-
 - name: Add Facts for Nodes
   include_tasks: helper/add_fact.yml
   loop: "{{ nodes }}"
