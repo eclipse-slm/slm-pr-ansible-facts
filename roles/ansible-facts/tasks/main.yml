@@ -2,6 +2,11 @@
 
 
 - name: debug
+  debug: msg={{ node }}
+  with_items: item
+  loop_var: node
+
+- name: debug
   debug: msg={{ item }}
 
 - name: Set aas_id
