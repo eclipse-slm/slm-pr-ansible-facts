@@ -7,9 +7,9 @@
     - name: Use inventory Helper to setup ansible inventory
       ansible.builtin.include_role:
         name: profiler-inventory-helper
-    - name: debug
-      debug: msg={{ item }}
-      with_items: nodes
+    - name: Union Node
+      ansible.builtin.set_fact:
+        nodes: "{{ union(nodes) }}"
 
 # gather_facts:
 - name: Gather facts from util server
@@ -19,9 +19,6 @@
 - name: "Add Service to facts"
   hosts: localhost
   tasks:
-    - name: debug
-      debug: msg={{ item }}
-      with_items: nodes
 
     - name: Set aas_repository
       ansible.builtin.set_fact:

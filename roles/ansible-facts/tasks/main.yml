@@ -1,61 +1,9 @@
 ---
-- name: debug
-  debug: msg={{ item }}
-
-- name: debug
-  debug: msg={{ nodes }}
-
-- name: Set aas_id
-  ansible.builtin.set_fact:
-    aas_id: "{{ hostvars[item]['resource_id'] }}"
 
 - name: debug
   debug: msg={{ aas_id }}
-#
-## tasks file for ansible-facts
-#- name: Check input parameter
-#  ansible.builtin.assert:
-#    that:
-#      - (aas_id is defined) and (aas_id | length > 0)
-#      - (aas_repository_host is defined) and (aas_repository_port is defined)
-#      - (aas_registry_host is defined) and (aas_registry_port is defined)
-#      - (submodel_registry_host is defined) and (submodel_registry_port is defined)
-#
-#- name: Install bottle python package
-#  ansible.builtin.pip:
-#    name: basyx-python-sdk==1.0.0
-#
-#- name: Create AAS
-#  slm.aas.aas:
-#    scheme: http
-#    host: "{{ aas_repository_host }}"
-#    port: "{{ aas_repository_port }}"
-#    shell: "{{ aas }}"
-#  retries: 5
-#  register: create_aas_request
-#  when: force_create_ass | default(false)
-#  until: not create_aas_request.failed
-#
-#- name: Collection facts
-#  ansible.builtin.setup:
-#
-#- name: Convert facts to submodel
-#  slm.aas.convert_to_sm:
-#    id: "ansible-facts-{{ aas_id }}"
-#    id_short: "ansible-facts"
-#    facts: "{{ ansible_facts }}"
-#  register: convert_result
-#
-#
-#- name: Register submodel at repo
-#  slm.aas.submodel:
-#    scheme: http
-#    host: "{{ aas_repository_host }}"
-#    port: "{{ aas_repository_port }}"
-#    submodel: "{{ convert_result.submodel }}"
-#    force: true
-#  register: register_sm
-#
-## Only required if server does not register submodel automatically:
-#- name: Register submodel descriptor at registry
-#  ansible.builtin.include_tasks: helper/register_submodel_registry.yml
+
+- name: Add Facts for Nodes
+  include_tasks: helper/add_fact.yml
+  loop: "{{ nodes }}"
+
