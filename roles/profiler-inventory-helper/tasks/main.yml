@@ -9,10 +9,6 @@
     vault_approle_secret_id: "{{ lookup('env', 'VAULT_APPROLE_SECRET_ID') }}"
   no_log: "{{ no_log | default(true) }}"
 
-- name: Print all available facts
-  ansible.builtin.debug:
-    var: ansible_facts
-
 - ansible.builtin.assert:
     that:
       - (consul_url is defined) and (consul_url|length > 0)

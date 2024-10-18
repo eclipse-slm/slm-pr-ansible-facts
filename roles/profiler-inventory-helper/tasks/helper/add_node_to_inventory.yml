@@ -28,9 +28,17 @@
   debug:
     var: hostvars[ 'localhost' ].ansible_default_ipv4.address
 
+- name: Gather Host Facts and Print IP Addresses
+  hosts: all
+  gather_facts: yes
+
+- name: Print Host IP Address
+  debug:
+    msg: "Host IP Address: {{ ansible_host }}"
+
 - name: Set RemoteAccessService
   ansible.builtin.set_fact:
-    slm_ip: hostvars[ 'localhost' ].ansible_default_ipv4.address
+    slm_ip: ansible_host
 
 - name: Assert input parameter
   ansible.builtin.assert:
