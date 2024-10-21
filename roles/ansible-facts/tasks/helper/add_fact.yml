@@ -3,18 +3,14 @@
 
 - name: Set aas_id
   ansible.builtin.set_fact:
-    aas_id: "{{ hostvars[item]['resource_id'] }}"
+    aas_id: "{{ hostvars[node]['resource_id'] }}"
 
 
 # tasks file for ansible-facts
-- name: Check input parameter
+- name: Check aas_id parameter
   ansible.builtin.assert:
     that:
       - (aas_id is defined) and (aas_id | length > 0)
-
-- name: Install bottle python package
-  ansible.builtin.pip:
-    name: basyx-python-sdk==1.0.0
 
 - name: Create AAS
   slm.aas.aas:
@@ -34,7 +30,7 @@
   slm.aas.convert_to_sm:
     id: "ansible-facts-{{ aas_id }}"
     id_short: "ansible-facts"
-    facts: "{{ hostvars[item]['ansible_facts'] }}"
+    facts: "{{ hostvars[node]['ansible_facts'] }}"
   register: convert_result
 
 
