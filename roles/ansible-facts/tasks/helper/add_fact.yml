@@ -18,10 +18,7 @@
     host: "{{ aas_repository_host }}"
     port: "{{ aas_repository_port }}"
     shell: "{{ aas }}"
-  retries: 5
   register: create_aas_request
-  when: force_create_ass | default(false)
-  until: not create_aas_request.failed
 
 - name: Collection facts
   ansible.builtin.setup:
