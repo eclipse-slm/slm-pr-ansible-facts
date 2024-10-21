@@ -30,7 +30,7 @@
 - name: Add Node
   ansible.builtin.set_fact:
     nodes: "{{ nodes|default([]) + [ ip_address ] }}"
-  when: ip_address is defined and ip_address | length > 0
+  when: ip_address is defined
 
 - name: Setup ansible inventory
   ansible.builtin.add_host:
