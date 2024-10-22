@@ -45,6 +45,6 @@
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
     resource_id: "{{ item.ID }}"
-  no_log: "{{ no_log | default(false) }}"
+  no_log: "{{ no_log | default(true) }}"
   when: remote_access_service | length > 0
 
