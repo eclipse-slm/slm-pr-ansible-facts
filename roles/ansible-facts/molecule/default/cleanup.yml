@@ -9,7 +9,7 @@
         file: vars.yml
 
     - name: Create AAS
-      fabos.aas.aas:
+      slm.aas.aas:
         scheme: http
         host: "{{ aas_server_host }}"
         port: "{{ aas_server_port }}"
