@@ -10,7 +10,7 @@ roles:
     version: 1.0.0
     name: basyx_server
 
-  - src: "git+https://github.com/Ilgmi/ansible-collection-aas"
+  - src: "git+https://github.com/eclipse-slm/ansible-collection-aas"
     scm: git
-    version: "merge-fabos-aas"
+    version: "1.0.0"
     name: slm.aas
