@@ -44,5 +44,4 @@
     submodel_reference: "{{ submodel_reference }}"
     shell_id: "{{ aas_id }}"
     state: present
-  when: get_aas_registry.status == 404
   delegate_to: localhost
