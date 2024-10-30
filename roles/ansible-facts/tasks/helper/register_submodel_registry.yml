@@ -1,7 +1,7 @@
 ---
 - name: "Check if AAS with id = {{ aas_id }} is available at registry"
   ansible.builtin.uri:
-    url: "{{ aas_registry_url }}/shell-descriptors/{{ aas_id }}"
+    url: "{{ aas_registry_url }}/shell-descriptors/{{ aas_id | b64encode }}"
     method: GET
     status_code: [200, 404]
   register: get_aas_registry
@@ -22,5 +22,27 @@
     host: "{{ submodel_registry_host }}"
     port: "{{ submodel_registry_port }}"
     submodel_descriptor: "{{ aas_submodel_descriptor }}"
+  when: get_aas_registry.status == 404
+  delegate_to: localhost
+
+- name: Define submodel reference
+  set_fact:
+    submodel_reference: '{
+        "keys": [
+          {
+            "type": "Submodel",
+            "value": "{{ aas_submodel_descriptor.identification.id }}"
+          }
+        ]
+      }'
+
+- name: Add submodel reference to AAS
+  slm.aas.submodel_reference:
+    scheme: http
+    host: "{{ aas_repository_host }}"
+    port: "{{ aas_repository_port }}"
+    submodel_reference: "{{ submodel_reference }}"
+    shell_id: "{{ aas_id }}"
+    state: present
   when: get_aas_registry.status == 404
   delegate_to: localhost

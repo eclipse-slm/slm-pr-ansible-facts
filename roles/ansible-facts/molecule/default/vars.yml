@@ -9,6 +9,7 @@ aas_server_port: 4001
 aas_server_context: aasServer
 aas_server_base_url: "http://{{ aas_server_host }}:{{aas_server_port}}/{{ aas_server_context }}"
 
-aas_id: b6281b53-bdfa-429b-9ce0-7b420030d6da
+aas_id: Resource_b6281b53-bdfa-429b-9ce0-7b420030d6da
+resource_id: b6281b53-bdfa-429b-9ce0-7b420030d6da
 
 force_create_ass: true
