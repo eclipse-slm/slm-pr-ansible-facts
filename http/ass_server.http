@@ -7,17 +7,11 @@ Content-Type: application/json
 
 {
   "idShort": "test1234",
-  "identification": {
-    "id": "test1234",
-    "idType": "Custom"
-  },
+  "id": "test1234",
   "asset": {
     "kind": "",
     "idShort": "test1234",
-    "identification": {
-      "id": "test1234",
-      "idType": "Custom"
-    }
+    "id": "test1234"
   }
 }
 
@@ -33,10 +27,7 @@ PUT http://{{ass_server_host}}:{{ass_server_port}}/aasServer/shells/{{aas_id}}/a
 Content-Type: application/json
 
 {
-  "identification": {
-    "idType": "Custom",
-    "id": "submodel-id-short"
-  },
+  "id": "submodel-id-short",
   "idShort": "submodel-id-short"
 }
 

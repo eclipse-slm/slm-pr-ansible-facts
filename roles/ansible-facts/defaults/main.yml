@@ -4,9 +4,7 @@ aas_descriptor:
   modelType:
     name: AssetAdministrationShellDescriptor
   idShort: "{{ ansible_hostname }}"
-  identification:
-    idType: Custom
-    id: "{{ aas_id }}"
+  id: "{{ aas_id }}"
   endpoints:
     - type: http
       address: "{{ aas_repository_url }}/shells/{{ aas_id }}/aas"
@@ -21,9 +19,7 @@ aas_descriptor:
     dataSpecification: [ ]
     embeddedDataSpecifications: [ ]
     idShort: "{{ ansible_hostname }}"
-    identification:
-      idType: IRDI
-      id: ''
+    id: ''
     kind: Instance
   submodels: [ ]
 
@@ -31,9 +27,7 @@ aas_submodel_descriptor:
   modelType:
     name: SubmodelDescriptor
   idShort: "{{ aas_submodel.idShort }}"
-  identification:
-    idType: Custom
-    id: "{{ aas_submodel.identification.id }}"
+  id: "{{ aas_submodel.id }}"
   endpoints:
     - type: http
       address: "{{ aas_repository_url }}/shells/{{ aas_id }}/aas/submodels/{{ aas_submodel.idShort }}/submodel"
@@ -43,9 +37,7 @@ aas:
   modelType:
     name: AssetAdministrationShell
   idShort: "{{ ansible_hostname }}"
-  identification:
-    id: "{{ aas_id }}"
-    idType: Custom
+  id: "{{ aas_id }}"
   dataSpecification: []
   embeddedDataSpecifications: []
   asset:
@@ -53,9 +45,7 @@ aas:
       name: Asset
     kind: "Instance"
     idShort: "{{ ansible_hostname }}"
-    identification:
-      id: ""
-      idType: IRDI
+    id: ""
     dataSpecification: []
     embeddedDataSpecifications: []
   views: []
@@ -63,9 +53,7 @@ aas:
 
 aas_submodel:
   idShort: ansible-facts
-  identification:
-    idType: Custom
-    id: "ansible-facts-{{ aas_id }}"
+  id: "ansible-facts-{{ resource_id }}"
   dataSpecification: []
   embeddedDataSpecifications: []
   modelType:

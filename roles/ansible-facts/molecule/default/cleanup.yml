@@ -13,5 +13,5 @@
         scheme: http
         host: "{{ aas_server_host }}"
         port: "{{ aas_server_port }}"
-        shell_id: "{{ aas.identification.id }}"
+        shell_id: "{{ aas.id }}"
         state: "absent"

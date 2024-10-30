@@ -13,10 +13,7 @@ Content-Type: application/json
     "name": "AssetAdministrationShellDescriptor"
   },
   "idShort": "192.168.0.151",
-  "identification": {
-    "idType": "Custom",
-    "id": {{aas_id}}
-  },
+  "id": {{aas_id}},
   "endpoints": [],
   "asset": {
     "keys": [
@@ -33,10 +30,7 @@ Content-Type: application/json
     "dataSpecification": [],
     "embeddedDataSpecifications": [],
     "idShort": "test-hostname",
-    "identification": {
-      "idType": "IRDI",
-      "id": ""
-    },
+    "id": "",
     "kind": "Instance"
   },
   "submodels": []
