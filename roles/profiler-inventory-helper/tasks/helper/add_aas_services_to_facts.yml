@@ -1,0 +1,18 @@
+---
+- name: "Get AAS Services"
+  ansible.builtin.uri:
+    url: "{{ consul_url }}/v1/catalog/services?filter={{ filter_expr }}"
+    method: GET
+    status_code: 200, 404
+    validate_certs: false
+    headers:
+      Authorization: "Bearer {{ consul_token }}"
+  register: output_get_services
+  vars:
+    filter_expr: "{{ '\"aas\" in ServiceTags' | urlencode() }}"
+  no_log: "{{ no_log | default(true) }}"
+
+- name: "Add Service to facts"
+  ansible.builtin.include_tasks: helper/add_fact.yml
+  loop: "{{ output_get_services.json | dict2items }}"
+

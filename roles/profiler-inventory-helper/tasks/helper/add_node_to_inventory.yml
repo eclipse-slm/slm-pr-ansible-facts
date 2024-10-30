@@ -24,6 +24,14 @@
   no_log: "{{ no_log | default(true) }}"
   when: remote_access_service | length > 0
 
+- name: Add AAS Service to facts
+  ansible.builtin.include_tasks: helper/add_aas_services_to_facts.yml
+
+- name: Add Node
+  ansible.builtin.set_fact:
+    nodes: "{{ nodes|default([]) + [ ip_address ] }}"
+  when: ip_address is defined
+
 - name: Setup ansible inventory
   ansible.builtin.add_host:
     name: "{{ ip_address }}"

@@ -9,3 +9,8 @@ roles:
     scm: git
     version: 1.0.0
     name: basyx_server
+
+  - src: "git+https://github.com/eclipse-slm/ansible-collection-aas"
+    scm: git
+    version: "1.0.0"
+    name: slm.aas

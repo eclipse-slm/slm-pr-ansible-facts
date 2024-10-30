@@ -1,0 +1,21 @@
+---
+- name: "Get Nodes for Service"
+  ansible.builtin.uri:
+    url: "{{ consul_url }}/v1/catalog/service/{{ item.key }}"
+    method: GET
+    status_code: 200, 404
+    validate_certs: false
+    headers:
+      Authorization: "Bearer {{ consul_token }}"
+  register: output_get_service
+  no_log: "{{ no_log | default(true) }}"
+
+- name: Set Service
+  ansible.builtin.set_fact:
+    node_with_service: "{{ output_get_service.json | first | default('') }}"
+
+- name: Set Service Facts
+  ansible.builtin.set_fact:
+    "{{ node_with_service.ServiceName | replace('-','_') }}_host": "{{ node_with_service.ServiceAddress }}"
+    "{{ node_with_service.ServiceName | replace('-','_') }}_port": "{{ node_with_service.ServicePort }}"
+  when: (node_with_service | length > 0 )

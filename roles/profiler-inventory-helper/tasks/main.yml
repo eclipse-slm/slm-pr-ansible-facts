@@ -34,3 +34,5 @@
 - name: Add Node to inventory
   ansible.builtin.include_tasks: helper/add_node_to_inventory.yml
   loop: "{{ output_get_nodes.json }}"
+
+
