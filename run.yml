@@ -22,7 +22,7 @@
 
     - name: Set aas_repository
       ansible.builtin.set_fact:
-        aas_repository_host: "aas-repository"
+        aas_repository_host: "aas-environment"
         aas_repository_port: 8081
       when: (aas_repository_host is not defined) or (aas_repository_host | length == 0)
 
@@ -40,7 +40,7 @@
 
     - name: Set submodel_repository
       ansible.builtin.set_fact:
-        submodel_repository_host: "submodel-repository"
+        submodel_repository_host: "aas-environment"
         submodel_repository_port: 8081
       when: (submodel_repository is not defined) or (submodel_repository | length == 0)
 
