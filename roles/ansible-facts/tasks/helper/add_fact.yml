@@ -14,8 +14,13 @@
     scheme: http
     host: "{{ aas_repository_host }}"
     port: "{{ aas_repository_port }}"
+    path: "{{ aas_repository_path }}"
     shell: "{{ aas }}"
   register: create_aas_request
+  failed_when: >
+    create_aas_request.status_code is defined and
+    create_aas_request.status_code != 409 and
+    create_aas_request.failed
 
 - name: "Collection facts"
   ansible.builtin.setup:
@@ -27,15 +32,34 @@
     facts: "{{ hostvars[item]['ansible_facts'] }}"
   register: convert_result
 
-- name: "Register submodel 'convert_result.submodel.id' at repo"
+- name: "Register submodel '{{ convert_result.submodel.id }}' at repo"
   slm.aas.submodel:
     scheme: http
     host: "{{ submodel_repository_host }}"
     port: "{{ submodel_repository_port }}"
+    path: "{{ submodel_repository_path }}"
     submodel: "{{ convert_result.submodel }}"
     force: true
   register: register_sm
 
-# Only required if server does not register submodel automatically:
-#- name: "Register submodel descriptor at registry"
-#  ansible.builtin.include_tasks: helper/register_submodel_registry.yml
+- name: "Define submodel reference for submodel '{{ convert_result.submodel.id  }}'"
+  set_fact:
+    submodel_reference: '{
+        "keys": [
+          {
+            "type": "Submodel",
+            "value": "{{ convert_result.submodel.id }}"
+          }
+        ]
+      }'
+
+- name: "Add submodel reference for submodel '{{ convert_result.submodel.id  }}' to AAS '{{ aas_id }}'"
+  slm.aas.submodel_reference:
+    scheme: http
+    host: "{{ aas_repository_host }}"
+    port: "{{ aas_repository_port }}"
+    path: "{{ aas_repository_path }}"
+    submodel_reference: "{{ submodel_reference }}"
+    shell_id: "{{ aas_id }}"
+    state: present
+  delegate_to: localhost

@@ -8,17 +8,17 @@
       - (aas_registry_host is defined) and (aas_registry_port is defined)
       - (submodel_registry_host is defined) and (submodel_registry_port is defined)
 
-- name: "Set AAS Repository URL to 'http://{{ aas_repository_host }}:{{aas_repository_port}}'"
+- name: "Set AAS Repository URL to 'http://{{ aas_repository_host }}:{{aas_repository_port}}{{ aas_repository_path }}'"
   ansible.builtin.set_fact:
-    aas_repository_url: "http://{{ aas_repository_host }}:{{aas_repository_port}}"
+    aas_repository_url: "http://{{ aas_repository_host }}:{{aas_repository_port}}{{ aas_repository_path }}"
 
-- name: "Set AAS Registry URL to 'http://{{ aas_registry_host }}:{{aas_registry_port}}'"
+- name: "Set AAS Registry URL to 'http://{{ aas_registry_host }}:{{aas_registry_port}}{{ aas_registry_path }}'"
   ansible.builtin.set_fact:
-    aas_registry_url: "http://{{ aas_registry_host }}:{{aas_registry_port}}"
+    aas_registry_url: "http://{{ aas_registry_host }}:{{aas_registry_port}}{{ aas_registry_path }}"
 
-- name: "Set AAS Submodel URL to 'http://{{ submodel_registry_host }}:{{submodel_registry_port}}'"
+- name: "Set AAS Submodel URL to 'http://{{ submodel_registry_host }}:{{submodel_registry_port}}{{ submodel_registry_path }}'"
   ansible.builtin.set_fact:
-    aas_submodel_url: "http://{{ submodel_registry_host }}:{{submodel_registry_port}}"
+    aas_submodel_url: "http://{{ submodel_registry_host }}:{{submodel_registry_port}}{{ submodel_registry_path }}"
 
 - name: "Add Facts for Nodes"
   include_tasks: helper/add_fact.yml

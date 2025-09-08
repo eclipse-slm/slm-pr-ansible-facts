@@ -18,4 +18,10 @@ services:
       - "../:/src"
     extra_hosts:
       - "slm.local:host-gateway"
+#    networks:
+#      - eclipse-slm_default
+
+#networks:
+#    eclipse-slm_default:
+#        external: true
 

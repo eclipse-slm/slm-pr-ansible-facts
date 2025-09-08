@@ -24,24 +24,3 @@
     submodel_descriptor: "{{ aas_submodel_descriptor }}"
   when: get_aas_registry.status == 404
   delegate_to: localhost
-
-- name: "Define submodel reference for submodel '{{ aas_submodel_descriptor.id  }}'"
-  set_fact:
-    submodel_reference: '{
-        "keys": [
-          {
-            "type": "Submodel",
-            "value": "{{ aas_submodel_descriptor.id }}"
-          }
-        ]
-      }'
-
-- name: "Add submodel reference for submodel '{{ aas_submodel_descriptor.id  }}' to AAS '{{ aas_id }}'"
-  slm.aas.submodel_reference:
-    scheme: http
-    host: "{{ aas_repository_host }}"
-    port: "{{ aas_repository_port }}"
-    submodel_reference: "{{ submodel_reference }}"
-    shell_id: "{{ aas_id }}"
-    state: present
-  delegate_to: localhost

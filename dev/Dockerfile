@@ -15,6 +15,6 @@ WORKDIR src
 
 RUN ansible-galaxy install -r requirements.yml
 
-RUN pip install hvac
+RUN pip install hvac basyx-python-sdk==1.2.1
 
 CMD ansible-playbook ${ANSIBLE_CMD_PARAMETERS} run.yml

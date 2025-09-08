@@ -9,4 +9,4 @@ collections:
   - name: community.hashi_vault
   - name: "https://github.com/eclipse-slm/ansible-collection-aas.git"
     type: git
-    version: "1.0.0"
+    version: "main"
