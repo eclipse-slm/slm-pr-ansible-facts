@@ -1,0 +1,8 @@
+- hosts: localhost
+  tasks:
+  - set_fact:
+  -   : "{{ lookup('env', 'SERVICE_NAME') }}"
+      vault_approle_secret_id: "{{ lookup('env', 'SUPPORTED_CONNECTION_TYPES') }}"
+      vault_approle_secret_id: "{{ lookup('env', 'KEYCLOAK_TOKEN') }}"
+
+- import_playbook: ../run.yml

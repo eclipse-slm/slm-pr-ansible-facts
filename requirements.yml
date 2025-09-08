@@ -5,11 +5,6 @@ roles:
     version: main
     name: molecule_vsphere
 
-  - src: "git+https://github.com/eclipse-slm/slm-ansible-role-basyx-server"
-    scm: git
-    version: 1.0.0
-    name: basyx_server
-
 collections:
   - name: community.hashi_vault
   - name: "https://github.com/eclipse-slm/ansible-collection-aas.git"

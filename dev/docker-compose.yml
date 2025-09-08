@@ -1,0 +1,21 @@
+# docker compose run --rm --entrypoint /bin/bash dev-container
+# ansible-playbook -v /src/run.yml
+
+services:
+  dev-container:
+    build:
+      context: ..
+      dockerfile: ./dev/Dockerfile
+    image: dev-container_slm-pr-ansible-facts
+    environment:
+      CONSUL_URL: http://<your-consul-server>:8500
+      CONSUL_TOKEN: <your-consul-token>
+      VAULT_URL: http://<your-vault-server>:8200
+      VAULT_APPROLE_ROLE_ID: <your-vault-approle-role-id>
+      VAULT_APPROLE_SECRET_ID: <your-vault-approle-secret-id>
+      NO_LOG: false
+    volumes:
+      - "../:/src"
+    extra_hosts:
+      - "slm.local:host-gateway"
+
