@@ -1,7 +1,6 @@
----
-- name: "Get RemoteAccessService of node"
+- name: "Get RemoteAccessService of node '{{ _node_name }}'"
   ansible.builtin.uri:
-    url: "{{ consul_url }}/v1/catalog/node-services/{{ item.Node }}?filter={{ filter_expr }}"
+    url: "{{ consul_url }}/v1/catalog/node-services/{{ _node_name }}?filter={{ filter_expr }}"
     method: GET
     status_code: 200, 404
     validate_certs: no
@@ -9,42 +8,41 @@
       Authorization: "Bearer {{ consul_token }}"
   register: output_get_node_services
   vars:
-    filter_expr: "{{ '\"RemoteAccessService\" in Tags' | urlencode() }}"
+    filter_expr: "{{ '\"RemoteAccessConsulService\" in Tags' | urlencode() }}"
   no_log: "{{ no_log | default(true) }}"
 
-- name: Set RemoteAccessService
-  ansible.builtin.set_fact:
-    remote_access_service: "{{ output_get_node_services.json.Services | first | default('') }}"
+- block:
+  - name: Set RemoteAccessService
+    ansible.builtin.set_fact:
+      remote_access_service: "{{ output_get_node_services.json.Services | first | default('') }}"
 
-- name: Set resource credentials
-  ansible.builtin.set_fact:
-    ip_address: "{{ item.Address }}"
-    username: "{{ lookup('hashi_vault', '{{ vault_lookup_base_info }} secret=resources/data/{{ remote_access_service.ID }}/CredentialUsernamePassword:username') }}"
-    password: "{{ lookup('hashi_vault', '{{ vault_lookup_base_info }} secret=resources/data/{{ remote_access_service.ID }}/CredentialUsernamePassword:password') }}"
-  no_log: "{{ no_log | default(true) }}"
-  when: remote_access_service | length > 0
+  - name: Set resource credentials
+    ansible.builtin.set_fact:
+      ip_address: "{{ _node_address }}"
+      username: "{{ lookup('hashi_vault', '{{ vault_lookup_base_info }} secret=resources/data/{{ _resource_id }}/remoteAccess/{{ remote_access_service.ID }}/CredentialUsernamePassword:username') }}"
+      password: "{{ lookup('hashi_vault', '{{ vault_lookup_base_info }} secret=resources/data/{{ _resource_id }}/remoteAccess/{{ remote_access_service.ID }}/CredentialUsernamePassword:password') }}"
+    no_log: "{{ no_log | default(true) }}"
+    when: remote_access_service | length > 0
 
-- name: Add AAS Service to facts
-  ansible.builtin.include_tasks: helper/add_aas_services_to_facts.yml
+  - name: Add Node
+    ansible.builtin.set_fact:
+      nodes: "{{ nodes|default([]) + [ ip_address ] }}"
+    when: ip_address is defined
 
-- name: Add Node
-  ansible.builtin.set_fact:
-    nodes: "{{ nodes|default([]) + [ ip_address ] }}"
-  when: ip_address is defined
-
-- name: Setup ansible inventory
-  ansible.builtin.add_host:
-    name: "{{ ip_address }}"
-    ansible_hostname: "{{ item.Node }}"
-    groups: target_host
-    ansible_connection: ssh
-    ansible_port: "{{ remote_access_service.Port | default(22, true) }}"
-    ansible_ssh_user: "{{ username }}"
-    ansible_ssh_pass: "{{ password }}"
-    ansible_become_pass: "{{ password }}"
-    ansible_python_interpreter: /usr/bin/python3
-    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-    resource_id: "{{ item.ID }}"
-  no_log: "{{ no_log | default(true) }}"
-  when: remote_access_service | length > 0
+  - name: Setup ansible inventory
+    ansible.builtin.add_host:
+      name: "{{ ip_address }}"
+      ansible_hostname: "{{ _node_name }}"
+      groups: target_host
+      ansible_connection: ssh
+      ansible_port: "{{ remote_access_service.Port | default(22, true) }}"
+      ansible_ssh_user: "{{ username }}"
+      ansible_ssh_pass: "{{ password }}"
+      ansible_become_pass: "{{ password }}"
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+      resource_id: "{{ _node_id }}"
+    no_log: "{{ no_log | default(true) }}"
+    when: remote_access_service | length > 0
+  when: output_get_node_services.json.Services != 'null'
 

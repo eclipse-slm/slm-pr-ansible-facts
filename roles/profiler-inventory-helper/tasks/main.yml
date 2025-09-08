@@ -7,7 +7,7 @@
     vault_url: "{{ lookup('env', 'VAULT_URL') }}"
     vault_approle_role_id: "{{ lookup('env', 'VAULT_APPROLE_ROLE_ID') }}"
     vault_approle_secret_id: "{{ lookup('env', 'VAULT_APPROLE_SECRET_ID') }}"
-  no_log: "{{ no_log | default(true) }}"
+    no_log: "{{ lookup('env', 'NO_LOG') | default(true) }}"
 
 - ansible.builtin.assert:
     that:
@@ -34,5 +34,15 @@
 - name: Add Node to inventory
   ansible.builtin.include_tasks: helper/add_node_to_inventory.yml
   loop: "{{ output_get_nodes.json }}"
+  loop_control:
+    loop_var: node
+  vars:
+    _node_id: "{{ node.ID }}"
+    _node_name: "{{ node.Node }}"
+    _node_address: "{{ node.Address }}"
+    _resource_id: "{{ node.Meta.resourceId }}"
+  when: node.Meta.resourceId is defined
 
+- name: Add AAS Service to facts
+  ansible.builtin.include_tasks: helper/add_aas_services_to_facts.yml
 
