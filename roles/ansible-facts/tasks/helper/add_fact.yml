@@ -1,16 +1,15 @@
 ---
-- name: Set aas_id
+- name: "Set aas_id"
   ansible.builtin.set_fact:
     aas_id: "Resource_{{ hostvars[item]['resource_id'] }}"
     resource_id: "{{ hostvars[item]['resource_id'] }}"
 
-# tasks file for ansible-facts
-- name: Check aas_id parameter
+- name: "Check aas_id parameter"
   ansible.builtin.assert:
     that:
       - (aas_id is defined) and (aas_id | length > 0)
 
-- name: Create AAS
+- name: "Create AAS '{{ aas_id }}'"
   slm.aas.aas:
     scheme: http
     host: "{{ aas_repository_host }}"
@@ -18,17 +17,17 @@
     shell: "{{ aas }}"
   register: create_aas_request
 
-- name: Collection facts
+- name: "Collection facts"
   ansible.builtin.setup:
 
-- name: Convert facts to submodel
+- name: "Convert facts to submodel"
   slm.aas.convert_to_sm:
     id: "ansible-facts-{{ resource_id }}"
     id_short: "ansible-facts"
     facts: "{{ hostvars[item]['ansible_facts'] }}"
   register: convert_result
 
-- name: Register submodel at repo
+- name: "Register submodel 'convert_result.submodel.id' at repo"
   slm.aas.submodel:
     scheme: http
     host: "{{ submodel_repository_host }}"
@@ -38,5 +37,5 @@
   register: register_sm
 
 # Only required if server does not register submodel automatically:
-- name: Register submodel descriptor at registry
-  ansible.builtin.include_tasks: helper/register_submodel_registry.yml
+#- name: "Register submodel descriptor at registry"
+#  ansible.builtin.include_tasks: helper/register_submodel_registry.yml
