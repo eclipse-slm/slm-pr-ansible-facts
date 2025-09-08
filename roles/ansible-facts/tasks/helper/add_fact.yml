@@ -32,34 +32,36 @@
     facts: "{{ hostvars[item]['ansible_facts'] }}"
   register: convert_result
 
-- name: "Register submodel '{{ convert_result.submodel.id }}' at repo"
-  slm.aas.submodel:
-    scheme: http
-    host: "{{ submodel_repository_host }}"
-    port: "{{ submodel_repository_port }}"
-    path: "{{ submodel_repository_path }}"
-    submodel: "{{ convert_result.submodel }}"
-    force: true
-  register: register_sm
+- block:
+  - name: "Register submodel '{{ convert_result.submodel.id }}' at repo"
+    slm.aas.submodel:
+      scheme: http
+      host: "{{ submodel_repository_host }}"
+      port: "{{ submodel_repository_port }}"
+      path: "{{ submodel_repository_path }}"
+      submodel: "{{ convert_result.submodel }}"
+      force: true
+    register: register_sm
 
-- name: "Define submodel reference for submodel '{{ convert_result.submodel.id  }}'"
-  set_fact:
-    submodel_reference: '{
-        "keys": [
-          {
-            "type": "Submodel",
-            "value": "{{ convert_result.submodel.id }}"
-          }
-        ]
-      }'
+  - name: "Define submodel reference for submodel '{{ convert_result.submodel.id  }}'"
+    set_fact:
+      submodel_reference: '{
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "{{ convert_result.submodel.id }}"
+            }
+          ]
+        }'
 
-- name: "Add submodel reference for submodel '{{ convert_result.submodel.id  }}' to AAS '{{ aas_id }}'"
-  slm.aas.submodel_reference:
-    scheme: http
-    host: "{{ aas_repository_host }}"
-    port: "{{ aas_repository_port }}"
-    path: "{{ aas_repository_path }}"
-    submodel_reference: "{{ submodel_reference }}"
-    shell_id: "{{ aas_id }}"
-    state: present
-  delegate_to: localhost
+  - name: "Add submodel reference for submodel '{{ convert_result.submodel.id  }}' to AAS '{{ aas_id }}'"
+    slm.aas.submodel_reference:
+      scheme: http
+      host: "{{ aas_repository_host }}"
+      port: "{{ aas_repository_port }}"
+      path: "{{ aas_repository_path }}"
+      submodel_reference: "{{ submodel_reference }}"
+      shell_id: "{{ aas_id }}"
+      state: present
+    delegate_to: localhost
+  when: not convert_result.failed
