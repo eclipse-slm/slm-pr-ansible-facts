@@ -7,7 +7,7 @@
     vault_url: "{{ lookup('env', 'VAULT_URL') }}"
     vault_approle_role_id: "{{ lookup('env', 'VAULT_APPROLE_ROLE_ID') }}"
     vault_approle_secret_id: "{{ lookup('env', 'VAULT_APPROLE_SECRET_ID') }}"
-    no_log: "{{ lookup('env', 'NO_LOG') | default(true) }}"
+    no_log: "{{ (lookup('env', 'NO_LOG') | length > 0) | ternary(lookup('env', 'NO_LOG') | bool, true) }}"
 
 - ansible.builtin.assert:
     that:
