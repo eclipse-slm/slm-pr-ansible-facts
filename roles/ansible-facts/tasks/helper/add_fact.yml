@@ -31,6 +31,7 @@
     id_short: "ansible-facts"
     facts: "{{ hostvars[item]['ansible_facts'] }}"
   register: convert_result
+  ignore_errors: true
 
 - block:
   - name: "Register submodel '{{ convert_result.submodel.id }}' at repo"
